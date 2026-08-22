@@ -13,3 +13,4 @@ class Solution:
         return arr[n]
 
 # Time complexity = theta(n)
+# bottom up
