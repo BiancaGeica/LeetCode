@@ -2,20 +2,22 @@ def knapsack_0_1(nr_objects, maximum_capacity, list_of_objects):
     object_value = [x[1] for x in list_of_objects] # list comprehension to unzip lists
     object_weight = [x[0] for x in list_of_objects]
 
-    nr_rows_dp_matrix = nr_objects + 1 # added 1 for the "universe" with 0 objects available
     nr_columns_dp_matrix = maximum_capacity + 1 # + 1 for the knapsack with 0 capacity
-    dp = [[0 for _ in range(nr_columns_dp_matrix)] for _ in range(nr_rows_dp_matrix)]
+    dp = [[0 for _ in range(nr_columns_dp_matrix)] for _ in range(2)]
 
-    for i in range(nr_rows_dp_matrix):
+    for i in range(1, nr_objects + 1):
+        current_row = i % 2
+        previous_row = 1 - current_row
+
         for j in range(nr_columns_dp_matrix):
-            if i == 0 or j == 0:
-                dp[i][j] = 0
+            if j == 0:
+                dp[current_row][j] = 0
             elif  object_weight[i - 1] > j:
-                dp[i][j] = dp[i - 1][j]
+                dp[current_row][j] = dp[previous_row][j]
             else:
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j - object_weight[i - 1]] + object_value[i - 1])
+                dp[current_row][j] = max(dp[previous_row][j], dp[previous_row][j - object_weight[i - 1]] + object_value[i - 1])
 
-    return dp[nr_rows_dp_matrix - 1][nr_columns_dp_matrix - 1]
+    return dp[nr_objects % 2][nr_columns_dp_matrix - 1]
 
 # knapsack_0_1(4, 10, [(5, 10), (8, 19), (4, 4), (5, 10)])
 
@@ -39,4 +41,4 @@ for line in file:
 with open("rucsac.out", "w") as file:
     file.write(str(knapsack_0_1(nr_of_objects, capacity_backpack, objects)))
 
-# Time complexity: O(number_of_object x knapsack_capacity)
+# Time complexity: O(knapsack_capacity)
