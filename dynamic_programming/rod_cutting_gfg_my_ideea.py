@@ -5,24 +5,25 @@ class Solution:
 
         def helper(i):
             if i == 0:
-                return 0 # base case
+                return 0
 
-            maxi = price[i - 1]
-
+            aux = price[i - 1]
             if arr[i - 1] != -1:
                 return arr[i - 1]
             else:
-                for j in range(1, i):
-                    maxi = max(maxi, price[j - 1] + helper(i - j))
+                for j in range(1, int(i/2 + 1)):
+                    aux = max(aux, helper(j) + helper(i - j))
 
-            arr[i - 1] = maxi
-            return maxi
+            arr[i - 1] = aux
+
+            return aux
 
         result = helper(rod_total_length)
-        # print(result)
+        print(result)
         return result
 
 sol = Solution()
-sol.cutRod([1, 5, 8, 9, 10, 17, 17, 20])
+sol.cutRod([3])
 
+# personal idea
 # Complexity: O(n^2)
